@@ -4,92 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pizzaria Acelerado - Cardápio & Pedidos</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .active-tab {
-            border-bottom: 3px solid #dc2626;
-            color: #dc2626;
-            font-weight: bold;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #f3f4f6; color: #333; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* Header */
+        header { background-color: #dc2626; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .header-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; items-center; }
+        .header-title { font-size: 1.4rem; font-weight: bold; }
+        .header-address { font-size: 0.8rem; color: #fca5a5; margin-top: 3px; }
+        .cart-btn { background: white; color: #dc2626; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .cart-badge { background: #eab308; color: black; font-size: 0.75rem; padding: 2px 6px; border-radius: 10px; }
+
+        /* Banner */
+        .banner { background-color: #eab308; color: black; text-align: center; padding: 8px; font-size: 0.85rem; font-weight: bold; }
+
+        /* Main Container */
+        main { max-width: 900px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
+
+        /* Tabs */
+        .tabs { display: flex; background: white; border-radius: 8px 8px 0 0; border-bottom: 2px solid #ddd; overflow: hidden; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: none; font-size: 1rem; font-weight: bold; color: #666; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { border-bottom: 3px solid #dc2626; color: #dc2626; }
+
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card { background: white; border-radius: 8px; padding: 15px; border: 1px solid #e5e7eb; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 1.1rem; font-weight: bold; color: #1f2937; }
+        .card-desc { font-size: 0.85rem; color: #6b7280; margin: 6px 0 12px 0; }
+        .card-prices { font-size: 0.75rem; color: #4b5563; font-weight: bold; }
+        .card-prices span { color: #dc2626; font-size: 0.85rem; }
+        .action-btn { width: 100%; background: #dc2626; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .action-btn:hover { background: #b91c1c; }
+
+        /* Modais */
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; padding: 15px; z-index: 200; }
+        .modal-bg.hidden { display: none; }
+        .modal-body { background: white; border-radius: 12px; width: 100%; max-width: 450px; padding: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #9ca3af; cursor: pointer; }
+        
+        .size-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 15px 0; }
+        .size-btn { border: 1px solid #ccc; background: white; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; }
+        .size-btn.selected { border-color: #dc2626; background: #fef2f2; color: #dc2626; font-weight: bold; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
+        .form-control { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .cart-item-title { font-weight: bold; font-size: 0.95rem; }
+        .cart-item-sub { font-size: 0.75rem; color: #666; }
+        .cart-item-price { color: #dc2626; font-weight: bold; font-size: 0.9rem; }
+        .remove-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; }
+
+        /* Footer */
+        footer { background: #1f2937; color: #9ca3af; text-align: center; padding: 20px 15px; font-size: 0.85rem; margin-top: 30px; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col justify-between">
+<body>
 
     <!-- Header -->
-    <header class="bg-red-600 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+    <header>
+        <div class="header-container">
             <div>
-                <h1 class="text-2xl font-black tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-pizza-slice"></i> PIZZARIA ACELERADO
-                </h1>
-                <p class="text-xs text-red-100 flex items-center gap-1 mt-1">
-                    <i class="fa-solid fa-location-dot"></i> Rua Mestre Vitalino, 273 - Alto do Moura, Caruaru - PE
-                </p>
+                <div class="header-title"><i class="fa-solid fa-pizza-slice"></i> PIZZARIA ACELERADO</div>
+                <div class="header-address"><i class="fa-solid fa-location-dot"></i> Rua Mestre Vitalino, 273 - Alto do Moura, Caruaru - PE</div>
             </div>
-            <button onclick="openCart()" class="relative bg-white text-red-600 px-4 py-2 rounded-full font-bold shadow-lg hover:bg-red-50 transition">
+            <button onclick="openCart()" class="cart-btn">
                 <i class="fa-solid fa-cart-shopping"></i>
-                <span id="cart-count" class="bg-yellow-500 text-black text-xs px-2 py-0.5 rounded-full font-bold ml-1">0</span>
+                <span id="cart-count" class="cart-badge">0</span>
             </button>
         </div>
     </header>
 
-    <!-- Banner Informativo -->
-    <section class="bg-yellow-500 text-black py-2 text-center text-xs sm:text-sm font-semibold shadow-inner">
-        🚀 Atendimento Rápido | 🚚 Delivery & 🛍️ Retirada no Local | 📞 (81) 9 9370-1785
-    </section>
+    <div class="banner">🚀 Delivery & 🛍️ Retirada no Local | 📞 (81) 9 9370-1785</div>
 
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
-        
-        <!-- Categorias -->
-        <div class="flex border-b border-gray-300 mb-6 bg-white rounded-t-lg shadow-sm">
-            <button onclick="filterCategory('tradicional')" id="tab-tradicional" class="flex-1 py-3 text-center text-gray-600 font-semibold active-tab hover:text-red-600">
-                🍕 Tradicionais
-            </button>
-            <button onclick="filterCategory('especial')" id="tab-especial" class="flex-1 py-3 text-center text-gray-600 font-semibold hover:text-red-600">
-                ⭐ Especiais
-            </button>
-            <button onclick="filterCategory('doce')" id="tab-doce" class="flex-1 py-3 text-center text-gray-600 font-semibold hover:text-red-600">
-                🍫 Doces
-            </button>
+    <!-- Main -->
+    <main>
+        <div class="tabs">
+            <button onclick="filterCategory('tradicional')" id="tab-tradicional" class="tab-btn active">🍕 Tradicionais</button>
+            <button onclick="filterCategory('especial')" id="tab-especial" class="tab-btn">⭐ Especiais</button>
+            <button onclick="filterCategory('doce')" id="tab-doce" class="tab-btn">🍫 Doces</button>
         </div>
 
-        <!-- Lista de Produtos -->
-        <div id="pizza-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Renderizado via JS -->
-        </div>
+        <div id="pizza-list" class="grid"></div>
     </main>
 
-    <!-- Modal Modal de Seleção de Opções -->
-    <div id="options-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative">
-            <button onclick="closeOptionsModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-            
-            <h2 id="modal-pizza-title" class="text-xl font-bold text-gray-800 mb-1"></h2>
-            <p id="modal-pizza-desc" class="text-sm text-gray-500 mb-4"></p>
+    <!-- Modal Opções da Pizza -->
+    <div id="options-modal" class="modal-bg hidden">
+        <div class="modal-body">
+            <button onclick="closeOptionsModal()" class="close-btn">&times;</button>
+            <h2 id="modal-pizza-title" style="font-size: 1.2rem; margin-bottom: 4px;"></h2>
+            <p id="modal-pizza-desc" style="font-size: 0.85rem; color: #666; margin-bottom: 15px;"></p>
 
-            <!-- Tamanho -->
-            <div class="mb-4">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Escolha o Tamanho:</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="selectSize('P')" id="btn-size-P" class="size-btn border p-2 rounded-lg text-center font-semibold text-sm">
-                        P (4 fat.)<br><span id="price-P" class="text-xs text-red-600"></span>
-                    </button>
-                    <button onclick="selectSize('M')" id="btn-size-M" class="size-btn border p-2 rounded-lg text-center font-semibold text-sm">
-                        M (6 fat.)<br><span id="price-M" class="text-xs text-red-600"></span>
-                    </button>
-                    <button onclick="selectSize('G')" id="btn-size-G" class="size-btn border p-2 rounded-lg text-center font-semibold text-sm">
-                        G (8 fat.)<br><span id="price-G" class="text-xs text-red-600"></span>
-                    </button>
+            <div class="form-group">
+                <label>Escolha o Tamanho:</label>
+                <div class="size-grid">
+                    <button onclick="selectSize('P')" id="btn-size-P" class="size-btn">P (4 fat.)<br><span id="price-P"></span></button>
+                    <button onclick="selectSize('M')" id="btn-size-M" class="size-btn">M (6 fat.)<br><span id="price-M"></span></button>
+                    <button onclick="selectSize('G')" id="btn-size-G" class="size-btn">G (8 fat.)<br><span id="price-G"></span></button>
                 </div>
             </div>
 
-            <!-- Borda -->
-            <div class="mb-4">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Borda Recheada (+R$ 5,00):</label>
-                <select id="border-select" class="w-full border rounded-lg p-2 text-sm">
+            <div class="form-group">
+                <label>Borda Recheada (+ R$ 5,00):</label>
+                <select id="border-select" class="form-control">
                     <option value="Sem Borda">Sem Borda Recheada</option>
                     <option value="Catupiry">Catupiry (+ R$ 5,00)</option>
                     <option value="Cheddar">Cheddar (+ R$ 5,00)</option>
@@ -97,85 +117,71 @@
                 </select>
             </div>
 
-            <!-- Observação -->
-            <div class="mb-6">
-                <label class="block text-sm font-bold text-gray-700 mb-1">Observação:</label>
-                <input type="text" id="obs-input" placeholder="Ex: Tirar cebola, caprichar no orégano..." class="w-full border rounded-lg p-2 text-sm">
+            <div class="form-group">
+                <label>Observação:</label>
+                <input type="text" id="obs-input" placeholder="Ex: Sem cebola..." class="form-control">
             </div>
 
-            <button onclick="confirmAddToCart()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow transition">
-                Adicionar ao Carrinho
-            </button>
+            <button onclick="confirmAddToCart()" class="action-btn">Adicionar ao Carrinho</button>
         </div>
     </div>
 
-    <!-- Modal do Carrinho / Checkout -->
-    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeCart()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-            
-            <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-basket-shopping text-red-600"></i> Seu Pedido</h2>
+    <!-- Modal Carrinho / Checkout -->
+    <div id="cart-modal" class="modal-bg hidden">
+        <div class="modal-body">
+            <button onclick="closeCart()" class="close-btn">&times;</button>
+            <h2 style="font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+                <i class="fa-solid fa-basket-shopping" style="color:#dc2626;"></i> Seu Pedido
+            </h2>
 
-            <div id="cart-items" class="divide-y mb-4">
-                <!-- Itens -->
-            </div>
+            <div id="cart-items"></div>
 
-            <!-- Total -->
-            <div class="flex justify-between items-center text-lg font-bold border-t border-b py-3 mb-4">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem; margin: 15px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; padding: 10px 0;">
                 <span>Total:</span>
-                <span id="cart-total" class="text-red-600">R$ 0,00</span>
+                <span id="cart-total" style="color:#dc2626;">R$ 0,00</span>
             </div>
 
-            <!-- Formulário de Finalização -->
             <form id="checkout-form" onsubmit="sendWhatsApp(event)">
-                <div class="mb-3">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Seu Nome *</label>
-                    <input type="text" id="client-name" required class="w-full border rounded-lg p-2 text-sm" placeholder="Digite seu nome">
+                <div class="form-group">
+                    <label>Seu Nome *</label>
+                    <input type="text" id="client-name" required class="form-control" placeholder="Digite seu nome">
                 </div>
 
-                <!-- Tipo de Entrega -->
-                <div class="mb-3">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Forma de Envio *</label>
-                    <div class="flex gap-4">
-                        <label class="flex items-center gap-1 text-sm">
-                            <input type="radio" name="delivery_type" value="Entrega" checked onclick="toggleAddress(true)"> 🚚 Entrega
-                        </label>
-                        <label class="flex items-center gap-1 text-sm">
-                            <input type="radio" name="delivery_type" value="Retirada" onclick="toggleAddress(false)"> 🛍️ Retirada no Local
-                        </label>
+                <div class="form-group">
+                    <label>Forma de Envio *</label>
+                    <div style="display:flex; gap:15px; margin-top:5px;">
+                        <label style="font-weight:normal; font-size:0.9rem;"><input type="radio" name="delivery_type" value="Entrega" checked onclick="toggleAddress(true)"> 🚚 Entrega</label>
+                        <label style="font-weight:normal; font-size:0.9rem;"><input type="radio" name="delivery_type" value="Retirada" onclick="toggleAddress(false)"> 🛍️ Retirada</label>
                     </div>
                 </div>
 
-                <div id="address-block" class="mb-3">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Endereço de Entrega *</label>
-                    <textarea id="client-address" class="w-full border rounded-lg p-2 text-sm" rows="2" placeholder="Rua, Número, Bairro e Ponto de Referência"></textarea>
+                <div id="address-block" class="form-group">
+                    <label>Endereço de Entrega *</label>
+                    <textarea id="client-address" class="form-control" rows="2" placeholder="Rua, Número, Bairro e Referência"></textarea>
                 </div>
 
-                <!-- Forma de Pagamento -->
-                <div class="mb-4">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Forma de Pagamento *</label>
-                    <select id="payment-method" required class="w-full border rounded-lg p-2 text-sm">
+                <div class="form-group">
+                    <label>Forma de Pagamento *</label>
+                    <select id="payment-method" required class="form-control">
                         <option value="Pix">Pix</option>
                         <option value="Cartão de Crédito/Débito">Cartão de Crédito/Débito</option>
                         <option value="Dinheiro">Dinheiro</option>
                     </select>
                 </div>
 
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow flex items-center justify-center gap-2 transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> Enviar Pedido via WhatsApp
+                <button type="submit" class="action-btn" style="background:#16a34a;">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 py-6 text-center text-sm mt-8">
-        <p class="font-bold text-white mb-1">Pizzaria Acelerado</p>
+    <footer>
+        <p style="font-weight:bold; color:white;">Pizzaria Acelerado</p>
         <p>Rua Mestre Vitalino, 273 - Alto do Moura, Caruaru - PE</p>
-        <p class="text-xs text-gray-500 mt-2">© 2026 Pizzaria Acelerado. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Lógica em JavaScript -->
     <script>
         const WHATSAPP_NUMBER = "5581993701785";
 
@@ -186,19 +192,14 @@
         };
 
         const pizzas = [
-            // Tradicionais
             { id: 1, name: "Calabresa", desc: "Molho, muçarela, calabresa fatiada, cebola e orégano", category: "tradicional" },
             { id: 2, name: "Mussarela", desc: "Molho, muçarela abundante, rodelas de tomate e orégano", category: "tradicional" },
             { id: 3, name: "Marguerita", desc: "Molho, muçarela, tomate, manjericão fresco e orégano", category: "tradicional" },
             { id: 4, name: "Frango com Catupiry", desc: "Molho, frango desfiado temperado, catupiry e orégano", category: "tradicional" },
-            
-            // Especiais
             { id: 5, name: "Português", desc: "Molho, muçarela, presunto, ovo, cebola, pimentão e azeitonas", category: "especial" },
             { id: 6, name: "Carne de Sol", desc: "Molho, muçarela, carne de sol desfiada, queijo coalho e cebola roxa", category: "especial" },
             { id: 7, name: "Acelerado Especial", desc: "Molho, muçarela, calabresa, frango, bacon, catupiry e milho", category: "especial" },
             { id: 8, name: "Bacon Crocante", desc: "Molho, muçarela, bacon em cubos crocantes e milho verde", category: "especial" },
-
-            // Doces
             { id: 9, name: "Chocolate com Morango", desc: "Creme de chocolate ao leite e morangos fatiados", category: "doce" },
             { id: 10, name: "Prestígio", desc: "Chocolate ao leite coberto com coco ralado", category: "doce" },
             { id: 11, name: "Romeu e Julieta", desc: "Muçarela especial com goiabada cremosa", category: "doce" }
@@ -212,7 +213,6 @@
         function renderPizzas() {
             const container = document.getElementById('pizza-list');
             container.innerHTML = '';
-
             const filtered = pizzas.filter(p => p.category === currentCategory);
 
             filtered.forEach(pizza => {
@@ -221,19 +221,17 @@
                 const gPrice = prices[pizza.category].G;
 
                 container.innerHTML += `
-                    <div class="bg-white rounded-lg p-4 shadow-sm border flex flex-col justify-between hover:shadow-md transition">
+                    <div class="card">
                         <div>
-                            <h3 class="font-bold text-lg text-gray-800">${pizza.name}</h3>
-                            <p class="text-sm text-gray-600 mt-1">${pizza.desc}</p>
-                            <div class="mt-3 text-xs font-semibold text-gray-500">
-                                P: <span class="text-red-600 font-bold">R$ ${pPrice.toFixed(2)}</span> | 
-                                M: <span class="text-red-600 font-bold">R$ ${mPrice.toFixed(2)}</span> | 
-                                G: <span class="text-red-600 font-bold">R$ ${gPrice.toFixed(2)}</span>
+                            <div class="card-title">${pizza.name}</div>
+                            <div class="card-desc">${pizza.desc}</div>
+                            <div class="card-prices">
+                                P: <span>R$ ${pPrice.toFixed(2)}</span> | 
+                                M: <span>R$ ${mPrice.toFixed(2)}</span> | 
+                                G: <span>R$ ${gPrice.toFixed(2)}</span>
                             </div>
                         </div>
-                        <button onclick="openOptionsModal(${pizza.id})" class="mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-sm transition">
-                            Montar Pizza
-                        </button>
+                        <button onclick="openOptionsModal(${pizza.id})" class="action-btn">Montar Pizza</button>
                     </div>
                 `;
             });
@@ -241,8 +239,8 @@
 
         function filterCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.active-tab').forEach(el => el.classList.remove('active-tab'));
-            document.getElementById(`tab-${cat}`).classList.add('active-tab');
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${cat}`).classList.add('active');
             renderPizzas();
         }
 
@@ -268,9 +266,8 @@
 
         function selectSize(size) {
             selectedSize = size;
-            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('border-red-600', 'bg-red-50', 'text-red-600'));
-            const activeBtn = document.getElementById(`btn-size-${size}`);
-            activeBtn.classList.add('border-red-600', 'bg-red-50', 'text-red-600');
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`btn-size-${size}`).classList.add('selected');
         }
 
         function confirmAddToCart() {
@@ -296,22 +293,19 @@
             document.getElementById('cart-count').innerText = cart.length;
             const itemsContainer = document.getElementById('cart-items');
             itemsContainer.innerHTML = '';
-
             let total = 0;
 
             cart.forEach((item, index) => {
                 total += item.price;
                 itemsContainer.innerHTML += `
-                    <div class="py-3 flex justify-between items-center">
+                    <div class="cart-item">
                         <div>
-                            <p class="font-bold text-gray-800">${item.name} (${item.size})</p>
-                            <p class="text-xs text-gray-500">Borda: ${item.border}</p>
-                            ${item.obs ? `<p class="text-xs text-amber-600 italic">Obs: ${item.obs}</p>` : ''}
-                            <p class="text-sm font-semibold text-red-600">R$ ${item.price.toFixed(2)}</p>
+                            <div class="cart-item-title">${item.name} (${item.size})</div>
+                            <div class="cart-item-sub">Borda: ${item.border}</div>
+                            ${item.obs ? `<div class="cart-item-sub" style="color:#d97706;">Obs: ${item.obs}</div>` : ''}
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
                         </div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-sm font-bold">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <button onclick="removeFromCart(${index})" class="remove-btn"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
             });
@@ -340,17 +334,16 @@
             const addressBlock = document.getElementById('address-block');
             const addressInput = document.getElementById('client-address');
             if (show) {
-                addressBlock.classList.remove('hidden');
+                addressBlock.style.display = 'block';
                 addressInput.setAttribute('required', 'required');
             } else {
-                addressBlock.classList.add('hidden');
+                addressBlock.style.display = 'none';
                 addressInput.removeAttribute('required');
             }
         }
 
         function sendWhatsApp(e) {
             e.preventDefault();
-
             const name = document.getElementById('client-name').value;
             const deliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
             const address = document.getElementById('client-address').value;
@@ -377,11 +370,9 @@
             msg += `*TOTAL:* R$ ${total.toFixed(2)}\n\n`;
             msg += `_Rua Mestre Vitalino, 273 - Alto do Moura, Caruaru - PE_`;
 
-            const encodedMsg = encodeURIComponent(msg);
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMsg}`, '_blank');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Render inicial
         renderPizzas();
     </script>
 </body>
