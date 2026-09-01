@@ -11,7 +11,7 @@
         
         /* Header */
         header { background-color: #dc2626; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .header-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; items-center; }
+        .header-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .header-title { font-size: 1.4rem; font-weight: bold; }
         .header-address { font-size: 0.8rem; color: #fca5a5; margin-top: 3px; }
         .cart-btn { background: white; color: #dc2626; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
@@ -24,8 +24,8 @@
         main { max-width: 900px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
 
         /* Tabs */
-        .tabs { display: flex; background: white; border-radius: 8px 8px 0 0; border-bottom: 2px solid #ddd; overflow: hidden; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: none; font-size: 1rem; font-weight: bold; color: #666; cursor: pointer; transition: 0.2s; }
+        .tabs { display: flex; background: white; border-radius: 8px 8px 0 0; border-bottom: 2px solid #ddd; overflow-x: auto; }
+        .tab-btn { flex: 1; min-width: 100px; padding: 12px; border: none; background: none; font-size: 0.95rem; font-weight: bold; color: #666; cursor: pointer; transition: 0.2s; white-space: nowrap; }
         .tab-btn.active { border-bottom: 3px solid #dc2626; color: #dc2626; }
 
         /* Product Grid */
@@ -33,7 +33,7 @@
         .card { background: white; border-radius: 8px; padding: 15px; border: 1px solid #e5e7eb; display: flex; flex-direction: column; justify-content: space-between; }
         .card-title { font-size: 1.1rem; font-weight: bold; color: #1f2937; }
         .card-desc { font-size: 0.85rem; color: #6b7280; margin: 6px 0 12px 0; }
-        .card-prices { font-size: 0.75rem; color: #4b5563; font-weight: bold; }
+        .card-prices { font-size: 0.75rem; color: #4b5563; font-weight: bold; line-height: 1.4; }
         .card-prices span { color: #dc2626; font-size: 0.85rem; }
         .action-btn { width: 100%; background: #dc2626; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
         .action-btn:hover { background: #b91c1c; }
@@ -44,13 +44,15 @@
         .modal-body { background: white; border-radius: 12px; width: 100%; max-width: 450px; padding: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #9ca3af; cursor: pointer; }
         
-        .size-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 15px 0; }
-        .size-btn { border: 1px solid #ccc; background: white; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; }
+        .size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0 15px 0; }
+        .size-btn { border: 1px solid #ccc; background: white; padding: 8px 4px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-align: center; }
         .size-btn.selected { border-color: #dc2626; background: #fef2f2; color: #dc2626; font-weight: bold; }
 
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
         .form-control { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+
+        .gps-btn { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-top: 5px; display: inline-flex; align-items: center; gap: 5px; }
 
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
         .cart-item-title { font-weight: bold; font-size: 0.95rem; }
@@ -78,7 +80,7 @@
         </div>
     </header>
 
-    <div class="banner">🚀 Delivery & 🛍️ Retirada no Local | 📞 (81) 9 9370-1785</div>
+    <div class="banner">🚀 Delivery & 🛍️ Retirada no Local | 📞 (81) 98353-8032</div>
 
     <!-- Main -->
     <main>
@@ -104,6 +106,7 @@
                     <button onclick="selectSize('P')" id="btn-size-P" class="size-btn">P (4 fat.)<br><span id="price-P"></span></button>
                     <button onclick="selectSize('M')" id="btn-size-M" class="size-btn">M (6 fat.)<br><span id="price-M"></span></button>
                     <button onclick="selectSize('G')" id="btn-size-G" class="size-btn">G (8 fat.)<br><span id="price-G"></span></button>
+                    <button onclick="selectSize('GG')" id="btn-size-GG" class="size-btn">GG (12 fat.)<br><span id="price-GG"></span></button>
                 </div>
             </div>
 
@@ -158,6 +161,9 @@
                 <div id="address-block" class="form-group">
                     <label>Endereço de Entrega *</label>
                     <textarea id="client-address" class="form-control" rows="2" placeholder="Rua, Número, Bairro e Referência"></textarea>
+                    <button type="button" onclick="getGPSLocation()" class="gps-btn">
+                        <i class="fa-solid fa-location-crosshairs"></i> Usar minha localização atual (GPS)
+                    </button>
                 </div>
 
                 <div class="form-group">
@@ -183,26 +189,69 @@
     </footer>
 
     <script>
-        const WHATSAPP_NUMBER = "5581993701785";
+        const WHATSAPP_NUMBER = "5581983538032";
 
         const prices = {
-            tradicional: { P: 18.00, M: 25.00, G: 30.00 },
-            especial:    { P: 22.00, M: 28.00, G: 35.00 },
-            doce:        { P: 20.00, M: 26.00, G: 32.00 }
+            tradicional: { P: 18.00, M: 25.00, G: 30.00, GG: 35.00 },
+            especial:    { P: 22.00, M: 28.00, G: 35.00, GG: 40.00 },
+            doce:        { P: 20.00, M: 26.00, G: 32.00, GG: 38.00 }
         };
 
         const pizzas = [
-            { id: 1, name: "Calabresa", desc: "Molho, muçarela, calabresa fatiada, cebola e orégano", category: "tradicional" },
-            { id: 2, name: "Mussarela", desc: "Molho, muçarela abundante, rodelas de tomate e orégano", category: "tradicional" },
-            { id: 3, name: "Marguerita", desc: "Molho, muçarela, tomate, manjericão fresco e orégano", category: "tradicional" },
-            { id: 4, name: "Frango com Catupiry", desc: "Molho, frango desfiado temperado, catupiry e orégano", category: "tradicional" },
-            { id: 5, name: "Português", desc: "Molho, muçarela, presunto, ovo, cebola, pimentão e azeitonas", category: "especial" },
-            { id: 6, name: "Carne de Sol", desc: "Molho, muçarela, carne de sol desfiada, queijo coalho e cebola roxa", category: "especial" },
-            { id: 7, name: "Acelerado Especial", desc: "Molho, muçarela, calabresa, frango, bacon, catupiry e milho", category: "especial" },
-            { id: 8, name: "Bacon Crocante", desc: "Molho, muçarela, bacon em cubos crocantes e milho verde", category: "especial" },
-            { id: 9, name: "Chocolate com Morango", desc: "Creme de chocolate ao leite e morangos fatiados", category: "doce" },
-            { id: 10, name: "Prestígio", desc: "Chocolate ao leite coberto com coco ralado", category: "doce" },
-            { id: 11, name: "Romeu e Julieta", desc: "Muçarela especial com goiabada cremosa", category: "doce" }
+            // TRADICIONAIS
+            { id: 1, name: "Calabresa", desc: "Molho de tomate, muçarela, calabresa e orégano", category: "tradicional" },
+            { id: 2, name: "Mussarela", desc: "Molho de tomate, muçarela abundante e orégano", category: "tradicional" },
+            { id: 3, name: "Marguerita", desc: "Molho de tomate, muçarela, tomate e orégano", category: "tradicional" },
+            { id: 4, name: "Frango Mussarela", desc: "Molho de tomate, muçarela, frango desfiado e orégano", category: "tradicional" },
+            { id: 5, name: "Frango Catupiry", desc: "Molho de tomate, muçarela, frango desfiado, catupiry e orégano", category: "tradicional" },
+            { id: 6, name: "Calabresa Catupiry", desc: "Molho de tomate, muçarela, calabresa, catupiry e orégano", category: "tradicional" },
+            { id: 7, name: "Calamussa", desc: "Molho de tomate, muçarela, calabresa fatiada e orégano", category: "tradicional" },
+            { id: 8, name: "2 Queijos", desc: "Molho de tomate, muçarela, catupiry e orégano", category: "tradicional" },
+            { id: 9, name: "Bacon", desc: "Molho de tomate, muçarela, bacon em cubos e orégano", category: "tradicional" },
+            { id: 10, name: "Americana", desc: "Molho de tomate, muçarela, presunto, ovos, bacon e orégano", category: "tradicional" },
+            { id: 11, name: "Atum", desc: "Molho de tomate, muçarela, atum, cebola e orégano", category: "tradicional" },
+            { id: 12, name: "Baiana", desc: "Molho de tomate, muçarela, calabresa moída, pimenta e orégano", category: "tradicional" },
+            { id: 13, name: "Napolitana", desc: "Molho de tomate, muçarela, tomate, parmesão e orégano", category: "tradicional" },
+            { id: 14, name: "Toscana", desc: "Molho de tomate, muçarela, calabresa moída, cebola e orégano", category: "tradicional" },
+            { id: 15, name: "Portuguesa", desc: "Molho de tomate, muçarela, presunto, ovos, cebola, ervilha e orégano", category: "tradicional" },
+
+            // ESPECIAIS
+            { id: 16, name: "4 Queijos", desc: "Molho de tomate, muçarela, catupiry, provolone, gorgonzola e orégano", category: "especial" },
+            { id: 17, name: "Bacon X", desc: "Molho de tomate, muçarela, bacon, milho, catupiry e orégano", category: "especial" },
+            { id: 18, name: "Calabresa Cream Cheese", desc: "Molho de tomate, muçarela, calabresa e cream cheese", category: "especial" },
+            { id: 19, name: "Carne de Sol Catupiry", desc: "Molho de tomate, muçarela, carne de sol, catupiry e orégano", category: "especial" },
+            { id: 20, name: "Carne de Sol Cream Cheese", desc: "Molho de tomate, muçarela, carne de sol e cream cheese", category: "especial" },
+            { id: 21, name: "Carne de Sol Acebolada", desc: "Molho de tomate, muçarela, carne de sol, cebola e orégano", category: "especial" },
+            { id: 22, name: "Charque Acebolada", desc: "Molho de tomate, muçarela, charque, cebola e orégano", category: "especial" },
+            { id: 23, name: "Charque Catupiry", desc: "Molho de tomate, muçarela, charque, catupiry e orégano", category: "especial" },
+            { id: 24, name: "Charque Cream Cheese", desc: "Molho de tomate, muçarela, charque e cream cheese", category: "especial" },
+            { id: 25, name: "Costelinha BBQ", desc: "Molho de tomate, muçarela, costelinha suína e molho barbecue", category: "especial" },
+            { id: 26, name: "Camarão", desc: "Molho de tomate, muçarela, camarão selecionado e orégano", category: "especial" },
+            { id: 27, name: "Camarão Catupiry", desc: "Molho de tomate, muçarela, camarão, catupiry e orégano", category: "especial" },
+            { id: 28, name: "Camarão Cream Cheese", desc: "Molho de tomate, muçarela, camarão e cream cheese", category: "especial" },
+            { id: 29, name: "Camarão Tarê", desc: "Molho de tomate, muçarela, camarão, cream cheese e molho tarê", category: "especial" },
+            { id: 30, name: "Camarão Tropical", desc: "Molho de tomate, muçarela, camarão, abacaxi e cream cheese", category: "especial" },
+            { id: 31, name: "Franbacon", desc: "Molho de tomate, muçarela, frango desfiado, bacon e orégano", category: "especial" },
+            { id: 32, name: "Frango Crocante", desc: "Molho de tomate, muçarela, frango, batata palha e orégano", category: "especial" },
+            { id: 33, name: "Frango Cream Cheese", desc: "Molho de tomate, muçarela, frango desfiado e cream cheese", category: "especial" },
+            { id: 34, name: "Lombo Canadense", desc: "Molho de tomate, muçarela, lombo canadense e orégano", category: "especial" },
+            { id: 35, name: "Lombo Canadense Catupiry", desc: "Molho de tomate, muçarela, lombo canadense e catupiry", category: "especial" },
+            { id: 36, name: "Peproni", desc: "Molho de tomate, muçarela, pepperoni fatiado e orégano", category: "especial" },
+            { id: 37, name: "Portuguesa Especial", desc: "Molho de tomate, muçarela, presunto, ovo, bacon, milho, catupiry e azeitona", category: "especial" },
+
+            // DOCES
+            { id: 38, name: "Banana Nevada", desc: "Base de leite condensado, muçarela, banana, açúcar e canela", category: "doce" },
+            { id: 39, name: "Beijinho", desc: "Creme de leite, muçarela, leite condensado e coco ralado", category: "doce" },
+            { id: 40, name: "Brigadeiro", desc: "Creme de leite, muçarela e chocolate ao leite", category: "doce" },
+            { id: 41, name: "Cartola", desc: "Creme de leite, muçarela, banana, queijo coalho, açúcar e canela", category: "doce" },
+            { id: 42, name: "Chocolate", desc: "Creme de leite, muçarela e chocolate ao leite", category: "doce" },
+            { id: 43, name: "Chocolate Mesclado", desc: "Creme de leite, muçarela, chocolate ao leite e chocolate branco", category: "doce" },
+            { id: 44, name: "Churros", desc: "Creme de leite, muçarela, doce de leite, açúcar e canela", category: "doce" },
+            { id: 45, name: "Doce de Leite", desc: "Creme de leite, muçarela e doce de leite cremoso", category: "doce" },
+            { id: 46, name: "M&M", desc: "Creme de leite, muçarela, chocolate ao leite e confeitos M&M", category: "doce" },
+            { id: 47, name: "Paçoca", desc: "Creme de leite, muçarela, doce de leite e paçoca esfarelada", category: "doce" },
+            { id: 48, name: "Prestígio", desc: "Creme de leite, muçarela, chocolate ao leite e coco ralado", category: "doce" },
+            { id: 49, name: "Sensação", desc: "Creme de leite, muçarela, chocolate ao leite e morango fatiado", category: "doce" }
         ];
 
         let currentCategory = 'tradicional';
@@ -219,6 +268,7 @@
                 const pPrice = prices[pizza.category].P;
                 const mPrice = prices[pizza.category].M;
                 const gPrice = prices[pizza.category].G;
+                const ggPrice = prices[pizza.category].GG;
 
                 container.innerHTML += `
                     <div class="card">
@@ -227,8 +277,9 @@
                             <div class="card-desc">${pizza.desc}</div>
                             <div class="card-prices">
                                 P: <span>R$ ${pPrice.toFixed(2)}</span> | 
-                                M: <span>R$ ${mPrice.toFixed(2)}</span> | 
-                                G: <span>R$ ${gPrice.toFixed(2)}</span>
+                                M: <span>R$ ${mPrice.toFixed(2)}</span><br>
+                                G: <span>R$ ${gPrice.toFixed(2)}</span> | 
+                                GG: <span>R$ ${ggPrice.toFixed(2)}</span>
                             </div>
                         </div>
                         <button onclick="openOptionsModal(${pizza.id})" class="action-btn">Montar Pizza</button>
@@ -253,6 +304,7 @@
             document.getElementById('price-P').innerText = `R$ ${catPrices.P.toFixed(2)}`;
             document.getElementById('price-M').innerText = `R$ ${catPrices.M.toFixed(2)}`;
             document.getElementById('price-G').innerText = `R$ ${catPrices.G.toFixed(2)}`;
+            document.getElementById('price-GG').innerText = `R$ ${catPrices.GG.toFixed(2)}`;
 
             selectSize('G');
             document.getElementById('border-select').value = "Sem Borda";
@@ -339,6 +391,26 @@
             } else {
                 addressBlock.style.display = 'none';
                 addressInput.removeAttribute('required');
+            }
+        }
+
+        function getGPSLocation() {
+            const addressInput = document.getElementById('client-address');
+            if ("geolocation" in navigator) {
+                addressInput.placeholder = "Obtendo localização...";
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        addressInput.value = `Localização GPS: https://maps.google.com/?q=${lat},${lng}`;
+                    },
+                    error => {
+                        alert("Não foi possível obter a localização. Por favor, digite seu endereço manualmente.");
+                        addressInput.placeholder = "Rua, Número, Bairro e Referência";
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
             }
         }
 
